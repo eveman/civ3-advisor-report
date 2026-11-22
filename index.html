@@ -3,87 +3,129 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Civ3 Strategic Advisor</title>
+<title>Civ3 Strategic Advisor v0.6</title>
 <style>
-body{background:#0d1422;color:#e8f0fa;font:15px Segoe UI,Arial,sans-serif;
-max-width:1100px;margin:30px auto;padding:0 18px}
-h1,h2{color:#93caff}
-.stats{background:#1b2b42;border-radius:10px;padding:17px;line-height:2}
-table{border-collapse:collapse;width:100%;margin:15px 0 35px}
-th,td{padding:8px;text-align:left;border-bottom:1px solid #35445a}
-th{color:#98cfff}
-small{color:#9eafc5}
-a{color:#98cfff}
+body{margin:25px auto;padding:0 18px;max-width:1200px;
+background:#0c1421;color:#e8edf7;font:15px Segoe UI,Arial}
+h1,h2{color:#92caff}
+.cards{display:flex;flex-wrap:wrap;gap:12px;margin:24px 0}
+.card{background:#1c2d45;border-radius:10px;padding:16px;
+min-width:130px;flex:1}
+.card .value{font-size:25px;font-weight:bold;margin-top:7px}
+.card .label{color:#b2c4d8;font-size:13px}
+table{width:100%;border-collapse:collapse;margin-bottom:30px}
+th,td{padding:9px 7px;border-bottom:1px solid #34445b;text-align:left}
+th{color:#a2d2ff}
+a{color:#92caff}
+small{color:#9cacbf}
+#status{color:#9ed8b3}
 </style>
 </head>
 <body>
-<h1>Civ3 Strategic Advisor</h1>
-<div class="stats" id="stats">Loading latest game state...</div>
+<h1>Civ3 Strategic Advisor v0.6</h1>
+<p id="status">Loading current game state...</p>
+<div id="cards" class="cards"></div>
+
+<h2>Research</h2>
+<div id="research"></div>
+<p><small>
+Research ID is not yet mapped to the technology name.
+Research counter is a raw save-file field, not guaranteed turns remaining.
+</small></p>
+
+<h2>Research history</h2>
+<table><thead><tr>
+<th>Year</th><th>Government</th><th>Treasury</th>
+<th>Tech ID</th><th>Beakers stored</th><th>Counter</th>
+</tr></thead><tbody id="history"></tbody></table>
+
 <h2>Military</h2>
-<table>
-<thead><tr><th>Unit type ID</th><th>Count</th></tr></thead>
-<tbody id="units"></tbody>
-</table>
+<table><thead><tr><th>Unit type ID</th><th>Count</th></tr></thead>
+<tbody id="units"></tbody></table>
+
 <h2>Cities</h2>
-<table>
-<thead><tr>
+<table><thead><tr>
 <th>City</th><th>Pop</th><th>Specialists</th>
-<th>Food</th><th>Shields</th><th>Maintenance</th><th>Building</th>
-</tr></thead>
-<tbody id="cities"></tbody>
-</table>
-<small>
-Food and shields are accumulated stocks.
-Unit and production IDs are not yet decoded into names.
-Some fields require in-game validation.
-</small>
-<p><a href="state.json">Raw JSON</a></p>
+<th>Food stored</th><th>Shields stored</th>
+<th>Maintenance</th><th>Build ID</th>
+</tr></thead><tbody id="cities"></tbody></table>
+
+<p><small>
+Read-only game analysis. No save files or screenshots are published.
+Some fields are awaiting in-game validation.
+</small></p>
+<p><a href="state.json">Machine-readable state.json</a></p>
+
 <script>
-function populate(id, rows) {
-    const body = document.getElementById(id);
+function fillTable(id,rows){
+    const body=document.getElementById(id);
     body.replaceChildren();
-    for (const values of rows) {
-        const tr = document.createElement("tr");
-        for (const value of values) {
-            const td = document.createElement("td");
-            td.textContent = String(value ?? "");
+    for(const values of rows){
+        const tr=document.createElement("tr");
+        for(const value of values){
+            const td=document.createElement("td");
+            td.textContent=String(value??"");
             tr.appendChild(td);
         }
         body.appendChild(tr);
     }
 }
-async function update() {
-    try {
-        const response = await fetch(
-            "state.json?t=" + Date.now(),
-            {cache:"no-store"}
-        );
-        if (!response.ok) throw Error("HTTP " + response.status);
-        const s = await response.json();
+function addCard(parent,label,value){
+    const card=document.createElement("div");
+    card.className="card";
+    const a=document.createElement("div");
+    a.className="label";a.textContent=label;
+    const b=document.createElement("div");
+    b.className="value";b.textContent=String(value??"—");
+    card.append(a,b);parent.appendChild(card);
+}
+async function update(){
+    try{
+        const response=await fetch("state.json?t="+Date.now(),
+            {cache:"no-store"});
+        if(!response.ok)throw Error("HTTP "+response.status);
+        const s=await response.json();
+        const l=s.lead||{};
 
-        document.getElementById("stats").textContent =
-            "Year: " + s.game_year +
-            " | Cities: " + s.city_count +
-            " | Population: " + s.total_population +
-            " | Units: " + s.owned_units +
-            " | Maintenance: " + s.city_maintenance +
-            " | Updated: " + s.updated_utc;
+        document.getElementById("status").textContent=
+            "Game: "+s.game_year+" | Updated: "+s.updated_utc;
 
-        populate("units", (s.units || []).map(u => [
-            u.type_id, u.count
+        const cards=document.getElementById("cards");
+        cards.replaceChildren();
+        addCard(cards,"Cities",s.city_count);
+        addCard(cards,"Population levels",s.total_population);
+        addCard(cards,"Units",s.owned_units);
+        addCard(cards,"Treasury",l.treasury);
+        addCard(cards,"Government",l.government_name);
+        addCard(cards,"Era",l.era_name);
+
+        document.getElementById("research").textContent=
+            "Technology ID: "+l.research_id+
+            " | Stored beakers: "+l.research_beakers+
+            " | Raw research counter: "+l.research_counter;
+
+        fillTable("history",(s.history||[]).slice(-20).reverse()
+            .map(h=>[
+                h.game_year,h.government_name,h.treasury,
+                h.research_id,h.research_beakers,h.research_counter
+            ]));
+
+        fillTable("units",(s.units||[]).map(u=>[
+            u.type_id,u.count
         ]));
-        populate("cities", (s.cities || []).map(c => [
-            c.name, c.population, c.specialists,
-            c.food_stored, c.shields_stored, c.maintenance,
-            c.production_type + "/" + c.production_id
+
+        fillTable("cities",(s.cities||[]).map(c=>[
+            c.name,c.population,c.specialists,
+            c.food_stored,c.shields_stored,c.maintenance,
+            c.production_type+"/"+c.production_id
         ]));
-    } catch (error) {
-        document.getElementById("stats").textContent =
-            "Cannot load state.json: " + error.message;
+    }catch(e){
+        document.getElementById("status").textContent=
+            "Cannot load state.json: "+e.message;
     }
 }
 update();
-setInterval(update, 30000);
+setInterval(update,30000);
 </script>
 </body>
 </html>
