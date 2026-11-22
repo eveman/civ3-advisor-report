@@ -1,0 +1,451 @@
+{
+    "schema":  1,
+    "updated_utc":  "2026-11-22T18:48:31.1270876Z",
+    "game_year":  "1160 AD",
+    "city_count":  41,
+    "total_population":  332,
+    "owned_units":  141,
+    "city_maintenance":  138,
+    "units":  [
+                  {
+                      "type_id":  0,
+                      "count":  1
+                  },
+                  {
+                      "type_id":  1,
+                      "count":  30
+                  },
+                  {
+                      "type_id":  9,
+                      "count":  2
+                  },
+                  {
+                      "type_id":  10,
+                      "count":  5
+                  },
+                  {
+                      "type_id":  12,
+                      "count":  27
+                  },
+                  {
+                      "type_id":  74,
+                      "count":  1
+                  },
+                  {
+                      "type_id":  101,
+                      "count":  75
+                  }
+              ],
+    "cities":  [
+                   {
+                       "name":  "Agade",
+                       "population":  10,
+                       "specialists":  2,
+                       "maintenance":  1,
+                       "food_stored":  25,
+                       "shields_stored":  45,
+                       "production_type":  1,
+                       "production_id":  6
+                   },
+                   {
+                       "name":  "Akshak",
+                       "population":  7,
+                       "specialists":  1,
+                       "maintenance":  2,
+                       "food_stored":  24,
+                       "shields_stored":  5,
+                       "production_type":  1,
+                       "production_id":  6
+                   },
+                   {
+                       "name":  "Anshan",
+                       "population":  7,
+                       "specialists":  1,
+                       "maintenance":  4,
+                       "food_stored":  17,
+                       "shields_stored":  24,
+                       "production_type":  1,
+                       "production_id":  5
+                   },
+                   {
+                       "name":  "Apisala",
+                       "population":  3,
+                       "specialists":  0,
+                       "maintenance":  1,
+                       "food_stored":  0,
+                       "shields_stored":  31,
+                       "production_type":  1,
+                       "production_id":  3
+                   },
+                   {
+                       "name":  "Babil",
+                       "population":  3,
+                       "specialists":  0,
+                       "maintenance":  2,
+                       "food_stored":  4,
+                       "shields_stored":  2,
+                       "production_type":  1,
+                       "production_id":  3
+                   },
+                   {
+                       "name":  "Bad-tibira",
+                       "population":  10,
+                       "specialists":  0,
+                       "maintenance":  8,
+                       "food_stored":  36,
+                       "shields_stored":  144,
+                       "production_type":  1,
+                       "production_id":  9
+                   },
+                   {
+                       "name":  "Dabrum",
+                       "population":  10,
+                       "specialists":  2,
+                       "maintenance":  6,
+                       "food_stored":  30,
+                       "shields_stored":  154,
+                       "production_type":  1,
+                       "production_id":  10
+                   },
+                   {
+                       "name":  "Der",
+                       "population":  6,
+                       "specialists":  0,
+                       "maintenance":  1,
+                       "food_stored":  0,
+                       "shields_stored":  46,
+                       "production_type":  1,
+                       "production_id":  6
+                   },
+                   {
+                       "name":  "Erech",
+                       "population":  11,
+                       "specialists":  3,
+                       "maintenance":  2,
+                       "food_stored":  35,
+                       "shields_stored":  12,
+                       "production_type":  1,
+                       "production_id":  10
+                   },
+                   {
+                       "name":  "Isin",
+                       "population":  11,
+                       "specialists":  3,
+                       "maintenance":  1,
+                       "food_stored":  7,
+                       "shields_stored":  103,
+                       "production_type":  1,
+                       "production_id":  56
+                   },
+                   {
+                       "name":  "Kish",
+                       "population":  11,
+                       "specialists":  1,
+                       "maintenance":  9,
+                       "food_stored":  10,
+                       "shields_stored":  140,
+                       "production_type":  1,
+                       "production_id":  9
+                   },
+                   {
+                       "name":  "Kisurra",
+                       "population":  9,
+                       "specialists":  2,
+                       "maintenance":  2,
+                       "food_stored":  18,
+                       "shields_stored":  17,
+                       "production_type":  1,
+                       "production_id":  10
+                   },
+                   {
+                       "name":  "Kua",
+                       "population":  7,
+                       "specialists":  1,
+                       "maintenance":  1,
+                       "food_stored":  0,
+                       "shields_stored":  50,
+                       "production_type":  1,
+                       "production_id":  6
+                   },
+                   {
+                       "name":  "Kuara",
+                       "population":  11,
+                       "specialists":  3,
+                       "maintenance":  1,
+                       "food_stored":  0,
+                       "shields_stored":  69,
+                       "production_type":  1,
+                       "production_id":  6
+                   },
+                   {
+                       "name":  "Kutallu",
+                       "population":  8,
+                       "specialists":  1,
+                       "maintenance":  4,
+                       "food_stored":  32,
+                       "shields_stored":  9,
+                       "production_type":  1,
+                       "production_id":  10
+                   },
+                   {
+                       "name":  "Kutha",
+                       "population":  12,
+                       "specialists":  2,
+                       "maintenance":  6,
+                       "food_stored":  40,
+                       "shields_stored":  54,
+                       "production_type":  1,
+                       "production_id":  25
+                   },
+                   {
+                       "name":  "Lagash",
+                       "population":  10,
+                       "specialists":  2,
+                       "maintenance":  5,
+                       "food_stored":  39,
+                       "shields_stored":  42,
+                       "production_type":  1,
+                       "production_id":  10
+                   },
+                   {
+                       "name":  "Marad",
+                       "population":  7,
+                       "specialists":  1,
+                       "maintenance":  2,
+                       "food_stored":  12,
+                       "shields_stored":  5,
+                       "production_type":  1,
+                       "production_id":  6
+                   },
+                   {
+                       "name":  "Nagsu",
+                       "population":  9,
+                       "specialists":  2,
+                       "maintenance":  2,
+                       "food_stored":  6,
+                       "shields_stored":  5,
+                       "production_type":  1,
+                       "production_id":  6
+                   },
+                   {
+                       "name":  "New Agade",
+                       "population":  8,
+                       "specialists":  2,
+                       "maintenance":  2,
+                       "food_stored":  8,
+                       "shields_stored":  0,
+                       "production_type":  1,
+                       "production_id":  29
+                   },
+                   {
+                       "name":  "New Akshak",
+                       "population":  5,
+                       "specialists":  0,
+                       "maintenance":  1,
+                       "food_stored":  0,
+                       "shields_stored":  48,
+                       "production_type":  1,
+                       "production_id":  6
+                   },
+                   {
+                       "name":  "New Bad-tibira",
+                       "population":  8,
+                       "specialists":  1,
+                       "maintenance":  5,
+                       "food_stored":  0,
+                       "shields_stored":  16,
+                       "production_type":  1,
+                       "production_id":  9
+                   },
+                   {
+                       "name":  "New Der",
+                       "population":  10,
+                       "specialists":  2,
+                       "maintenance":  3,
+                       "food_stored":  12,
+                       "shields_stored":  56,
+                       "production_type":  1,
+                       "production_id":  4
+                   },
+                   {
+                       "name":  "New Erech",
+                       "population":  6,
+                       "specialists":  1,
+                       "maintenance":  2,
+                       "food_stored":  7,
+                       "shields_stored":  45,
+                       "production_type":  1,
+                       "production_id":  8
+                   },
+                   {
+                       "name":  "New Isin",
+                       "population":  10,
+                       "specialists":  2,
+                       "maintenance":  3,
+                       "food_stored":  20,
+                       "shields_stored":  36,
+                       "production_type":  1,
+                       "production_id":  10
+                   },
+                   {
+                       "name":  "New Kish",
+                       "population":  9,
+                       "specialists":  3,
+                       "maintenance":  2,
+                       "food_stored":  0,
+                       "shields_stored":  0,
+                       "production_type":  1,
+                       "production_id":  29
+                   },
+                   {
+                       "name":  "New Kisurra",
+                       "population":  10,
+                       "specialists":  2,
+                       "maintenance":  6,
+                       "food_stored":  39,
+                       "shields_stored":  84,
+                       "production_type":  1,
+                       "production_id":  12
+                   },
+                   {
+                       "name":  "New Kua",
+                       "population":  11,
+                       "specialists":  3,
+                       "maintenance":  6,
+                       "food_stored":  30,
+                       "shields_stored":  40,
+                       "production_type":  1,
+                       "production_id":  11
+                   },
+                   {
+                       "name":  "New Kuara",
+                       "population":  3,
+                       "specialists":  0,
+                       "maintenance":  1,
+                       "food_stored":  17,
+                       "shields_stored":  2,
+                       "production_type":  1,
+                       "production_id":  6
+                   },
+                   {
+                       "name":  "New Lagash",
+                       "population":  5,
+                       "specialists":  0,
+                       "maintenance":  1,
+                       "food_stored":  0,
+                       "shields_stored":  72,
+                       "production_type":  1,
+                       "production_id":  6
+                   },
+                   {
+                       "name":  "New Marad",
+                       "population":  6,
+                       "specialists":  1,
+                       "maintenance":  1,
+                       "food_stored":  7,
+                       "shields_stored":  1,
+                       "production_type":  1,
+                       "production_id":  8
+                   },
+                   {
+                       "name":  "New Sumer",
+                       "population":  7,
+                       "specialists":  1,
+                       "maintenance":  2,
+                       "food_stored":  0,
+                       "shields_stored":  37,
+                       "production_type":  1,
+                       "production_id":  25
+                   },
+                   {
+                       "name":  "New Umma",
+                       "population":  12,
+                       "specialists":  3,
+                       "maintenance":  5,
+                       "food_stored":  24,
+                       "shields_stored":  12,
+                       "production_type":  1,
+                       "production_id":  10
+                   },
+                   {
+                       "name":  "New Ur",
+                       "population":  7,
+                       "specialists":  2,
+                       "maintenance":  3,
+                       "food_stored":  16,
+                       "shields_stored":  53,
+                       "production_type":  1,
+                       "production_id":  3
+                   },
+                   {
+                       "name":  "New Zabalam",
+                       "population":  5,
+                       "specialists":  1,
+                       "maintenance":  1,
+                       "food_stored":  12,
+                       "shields_stored":  62,
+                       "production_type":  1,
+                       "production_id":  6
+                   },
+                   {
+                       "name":  "Sumer",
+                       "population":  9,
+                       "specialists":  0,
+                       "maintenance":  11,
+                       "food_stored":  32,
+                       "shields_stored":  12,
+                       "production_type":  2,
+                       "production_id":  12
+                   },
+                   {
+                       "name":  "Susa",
+                       "population":  6,
+                       "specialists":  0,
+                       "maintenance":  2,
+                       "food_stored":  20,
+                       "shields_stored":  30,
+                       "production_type":  1,
+                       "production_id":  8
+                   },
+                   {
+                       "name":  "Tutub",
+                       "population":  4,
+                       "specialists":  0,
+                       "maintenance":  0,
+                       "food_stored":  4,
+                       "shields_stored":  0,
+                       "production_type":  1,
+                       "production_id":  29
+                   },
+                   {
+                       "name":  "Umma",
+                       "population":  12,
+                       "specialists":  0,
+                       "maintenance":  8,
+                       "food_stored":  40,
+                       "shields_stored":  78,
+                       "production_type":  1,
+                       "production_id":  11
+                   },
+                   {
+                       "name":  "Ur",
+                       "population":  12,
+                       "specialists":  0,
+                       "maintenance":  12,
+                       "food_stored":  40,
+                       "shields_stored":  0,
+                       "production_type":  2,
+                       "production_id":  12
+                   },
+                   {
+                       "name":  "Zabalam",
+                       "population":  5,
+                       "specialists":  0,
+                       "maintenance":  1,
+                       "food_stored":  3,
+                       "shields_stored":  23,
+                       "production_type":  1,
+                       "production_id":  6
+                   }
+               ]
+}
