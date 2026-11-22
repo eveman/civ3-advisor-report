@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Civ3 Strategic Advisor v0.6</title>
+<title>Civ3 Strategic Advisor v0.7</title>
 <style>
 body{margin:25px auto;padding:0 18px;max-width:1200px;
 background:#0c1421;color:#e8edf7;font:15px Segoe UI,Arial}
@@ -22,32 +22,32 @@ small{color:#9cacbf}
 </style>
 </head>
 <body>
-<h1>Civ3 Strategic Advisor v0.6</h1>
+<h1>Civ3 Strategic Advisor v0.7</h1>
 <p id="status">Loading current game state...</p>
 <div id="cards" class="cards"></div>
 
 <h2>Research</h2>
 <div id="research"></div>
 <p><small>
-Research ID is not yet mapped to the technology name.
+Technology and unit names are decoded from Conquests.biq.
 Research counter is a raw save-file field, not guaranteed turns remaining.
 </small></p>
 
 <h2>Research history</h2>
 <table><thead><tr>
 <th>Year</th><th>Government</th><th>Treasury</th>
-<th>Tech ID</th><th>Beakers stored</th><th>Counter</th>
+<th>Technology</th><th>Beakers stored</th><th>Counter</th>
 </tr></thead><tbody id="history"></tbody></table>
 
 <h2>Military</h2>
-<table><thead><tr><th>Unit type ID</th><th>Count</th></tr></thead>
+<table><thead><tr><th>Unit</th><th>Count</th></tr></thead>
 <tbody id="units"></tbody></table>
 
 <h2>Cities</h2>
 <table><thead><tr>
 <th>City</th><th>Pop</th><th>Specialists</th>
 <th>Food stored</th><th>Shields stored</th>
-<th>Maintenance</th><th>Build ID</th>
+<th>Maintenance</th><th>Construction</th>
 </tr></thead><tbody id="cities"></tbody></table>
 
 <p><small>
@@ -100,24 +100,24 @@ async function update(){
         addCard(cards,"Era",l.era_name);
 
         document.getElementById("research").textContent=
-            "Technology ID: "+l.research_id+
+            "Technology: "+(l.research_name||("ID "+l.research_id))+
             " | Stored beakers: "+l.research_beakers+
             " | Raw research counter: "+l.research_counter;
 
         fillTable("history",(s.history||[]).slice(-20).reverse()
             .map(h=>[
                 h.game_year,h.government_name,h.treasury,
-                h.research_id,h.research_beakers,h.research_counter
+                (h.research_name||(s.rules&&s.rules.tech&&s.rules.tech[h.research_id])||("ID "+h.research_id)),h.research_beakers,h.research_counter
             ]));
 
         fillTable("units",(s.units||[]).map(u=>[
-            u.type_id,u.count
+            u.name||("ID "+u.type_id),u.count
         ]));
 
         fillTable("cities",(s.cities||[]).map(c=>[
             c.name,c.population,c.specialists,
             c.food_stored,c.shields_stored,c.maintenance,
-            c.production_type+"/"+c.production_id
+            c.production_name||("Type "+c.production_type+"/ID "+c.production_id)
         ]));
     }catch(e){
         document.getElementById("status").textContent=

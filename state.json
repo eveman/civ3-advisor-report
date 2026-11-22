@@ -1,5 +1,5 @@
 {
-    "schema":  6,
+    "schema":  7,
     "updated_utc":  "2026-11-22T18:42:26.2545300Z",
     "game_year":  "1160 AD",
     "city_count":  41,
@@ -16,36 +16,360 @@
                  "treasury":  207,
                  "research_id":  30,
                  "research_beakers":  580,
-                 "research_counter":  3
+                 "research_counter":  3,
+                 "research_name":  "Gunpowder"
              },
+    "rules":  {
+                  "rules_sha256":  "1BD610AB1420217F7D64A9214B60C0BC7686E4781A0D6E66590171535495609C",
+                  "tech":  [
+                               "Bronze Working",
+                               "Masonry",
+                               "Alphabet",
+                               "Pottery",
+                               "The Wheel",
+                               "Warrior Code",
+                               "Ceremonial Burial",
+                               "Iron Working",
+                               "Writing",
+                               "Mysticism",
+                               "Mathematics",
+                               "Philosophy",
+                               "Code of Laws",
+                               "Literature",
+                               "Map Making",
+                               "Horseback Riding",
+                               "Polytheism",
+                               "Currency",
+                               "The Republic",
+                               "Monarchy",
+                               "Construction",
+                               "Monotheism",
+                               "Feudalism",
+                               "Engineering",
+                               "Theology",
+                               "Chivalry",
+                               "Invention",
+                               "Printing Press",
+                               "Music Theory",
+                               "Education",
+                               "Gunpowder",
+                               "Banking",
+                               "Astronomy",
+                               "Chemistry",
+                               "Democracy",
+                               "Economics",
+                               "Navigation",
+                               "Physics",
+                               "Metallurgy",
+                               "Free Artistry",
+                               "Theory of Gravity",
+                               "Magnetism",
+                               "Military Tradition",
+                               "Nationalism",
+                               "Steam Power",
+                               "Medicine",
+                               "Communism",
+                               "Industrialization",
+                               "Electricity",
+                               "Scientific Method",
+                               "Sanitation",
+                               "Espionage",
+                               "The Corporation",
+                               "Refining",
+                               "Steel",
+                               "Atomic Theory",
+                               "Combustion",
+                               "Replaceable Parts",
+                               "Flight",
+                               "Amphibious War",
+                               "Mass Production",
+                               "Electronics",
+                               "Motorized Transportation",
+                               "Advanced Flight",
+                               "Rocketry",
+                               "Fission",
+                               "Computers",
+                               "Recycling",
+                               "Space Flight",
+                               "Nuclear Power",
+                               "Superconductor",
+                               "Miniaturization",
+                               "Ecology",
+                               "Synthetic Fibers",
+                               "Satellites",
+                               "The Laser",
+                               "Genetics",
+                               "Stealth",
+                               "Smart Weapons",
+                               "Robotics",
+                               "Integrated Defense",
+                               "Ironclads",
+                               "Fascism"
+                           ],
+                  "units":  [
+                                "Settler",
+                                "Worker",
+                                "Scout",
+                                "Explorer",
+                                "Marine",
+                                "Modern Paratrooper",
+                                "Warrior",
+                                "Archer",
+                                "Spearman",
+                                "Swordsman",
+                                "Chariot",
+                                "Horseman",
+                                "Pikeman",
+                                "Longbowman",
+                                "Musketman",
+                                "Knight",
+                                "Rifleman",
+                                "Cavalry",
+                                "Infantry",
+                                "Tank",
+                                "Mech Infantry",
+                                "Modern Armor",
+                                "Catapult",
+                                "Cannon",
+                                "Artillery",
+                                "Radar Artillery",
+                                "Cruise Missile",
+                                "Tactical Nuke",
+                                "ICBM",
+                                "Galley",
+                                "Caravel",
+                                "Frigate",
+                                "Galleon",
+                                "Ironclad",
+                                "Transport",
+                                "Carrier",
+                                "Submarine",
+                                "Destroyer",
+                                "Battleship",
+                                "AEGIS Cruiser",
+                                "Nuclear Submarine",
+                                "Fighter",
+                                "Bomber",
+                                "Helicopter",
+                                "Jet Fighter",
+                                "Stealth Fighter",
+                                "Stealth Bomber",
+                                "Leader",
+                                "Army",
+                                "Jaguar Warrior",
+                                "Bowman",
+                                "Hoplite",
+                                "Impi",
+                                "Legionary",
+                                "Immortals",
+                                "War Chariot",
+                                "Rider",
+                                "Mounted Warrior",
+                                "Musketeer",
+                                "Samurai",
+                                "War Elephant",
+                                "Cossack",
+                                "Panzer",
+                                "Man-O-War",
+                                "",
+                                "Privateer",
+                                "Keshik",
+                                "Conquistador",
+                                "Berserk",
+                                "Sipahi",
+                                "Gallic Swordsman",
+                                "Ansar Warrior",
+                                "Numidian Mercenary",
+                                "Hwach\u0027a",
+                                "Medieval Infantry",
+                                "Guerilla",
+                                "Princess",
+                                "Lincoln",
+                                "Hammurabi",
+                                "Mao",
+                                "Bismarck",
+                                "Alexander",
+                                "Caesar",
+                                "Xerxes",
+                                "Hiawatha",
+                                "Shaka",
+                                "Montezuma",
+                                "Cleopatra",
+                                "Elizabeth",
+                                "Catherine",
+                                "Abu",
+                                "Hannibal",
+                                "Osman",
+                                "Temujin",
+                                "Gandhi",
+                                "Ragnar",
+                                "Brennus",
+                                "Tokugawa",
+                                "Joan d\u0027Arc",
+                                "Wang Kon",
+                                "Isabella",
+                                "Enkidu Warrior",
+                                "Three-Man Chariot",
+                                "Mursilis",
+                                "Gilgamesh",
+                                "Henry",
+                                "Carrack",
+                                "Swiss Mercenary",
+                                "William of Orange",
+                                "Trebuchet",
+                                "Pachacuti",
+                                "Smoke-Jaguar",
+                                "Theodora",
+                                "Chasqui Scout",
+                                "Javelin Thrower",
+                                "Dromon",
+                                "Cruiser",
+                                "Crusader",
+                                "Ancient Cavalry",
+                                "Curragh",
+                                "Paratrooper",
+                                "TOW Infantry",
+                                "Flak",
+                                "Mobile SAM",
+                                "Rifleman",
+                                "Infantry",
+                                "Mech Infantry",
+                                "Nuclear Submarine",
+                                "Impi",
+                                "Legionary",
+                                "Musketeer",
+                                "Samurai",
+                                "",
+                                "Conquistador",
+                                "Numidian Mercenary",
+                                "Guerilla",
+                                "Carrack",
+                                "Chasqui Scout",
+                                "Javelin Thrower",
+                                "Dromon",
+                                "TOW Infantry"
+                            ],
+                  "buildings":  [
+                                    "Palace",
+                                    "Barracks",
+                                    "Granary",
+                                    "Temple",
+                                    "Marketplace",
+                                    "Library",
+                                    "Courthouse",
+                                    "Walls",
+                                    "Aqueduct",
+                                    "Bank",
+                                    "Cathedral",
+                                    "University",
+                                    "Colosseum",
+                                    "Factory",
+                                    "Manufacturing Plant",
+                                    "Recycling Center",
+                                    "Coal Plant",
+                                    "Hydro Plant",
+                                    "Nuclear Plant",
+                                    "Hospital",
+                                    "Research Lab",
+                                    "Mass Transit System",
+                                    "SAM Missile Battery",
+                                    "Coastal Fortress",
+                                    "Solar Plant",
+                                    "Harbor",
+                                    "Offshore Platform",
+                                    "Airport",
+                                    "Police Station",
+                                    "Wealth",
+                                    "The Pyramids",
+                                    "The Hanging Gardens",
+                                    "The Colossus",
+                                    "The Great Lighthouse",
+                                    "The Great Library",
+                                    "The Oracle",
+                                    "The Great Wall",
+                                    "Sun Tzu\u0027s Art of War",
+                                    "Sistine Chapel",
+                                    "Magellan\u0027s Voyage",
+                                    "Copernicus\u0027 Observatory",
+                                    "Shakespeare\u0027s Theater",
+                                    "Leonardo\u0027s Workshop",
+                                    "JS Bach\u0027s Cathedral",
+                                    "Newton\u0027s University",
+                                    "Smith\u0027s Trading Company",
+                                    "Universal Suffrage",
+                                    "Hoover Dam",
+                                    "Theory of Evolution",
+                                    "The United Nations",
+                                    "The Manhattan Project",
+                                    "Cure for Cancer",
+                                    "Longevity",
+                                    "SETI program",
+                                    "Heroic Epic",
+                                    "Iron Works",
+                                    "Forbidden Palace",
+                                    "Military Academy",
+                                    "The Pentagon",
+                                    "Wall Street",
+                                    "Apollo Program",
+                                    "Strategic Missile Defense",
+                                    "Intelligence Agency",
+                                    "Battlefield Medicine",
+                                    "SS Thrusters",
+                                    "SS Engine",
+                                    "SS Docking Bay",
+                                    "SS Cockpit",
+                                    "SS Fuel Cells",
+                                    "SS Life Support System",
+                                    "SS Stasis Chamber",
+                                    "SS Storage/Supply",
+                                    "SS Planetary Party Lounge",
+                                    "SS Exterior Casing",
+                                    "The Internet",
+                                    "Civil Defense",
+                                    "Stock Exchange",
+                                    "Commercial Dock",
+                                    "The Temple of Artemis",
+                                    "The Statue of Zeus",
+                                    "The Mausoleum of Mausollos",
+                                    "Knights Templar",
+                                    "Secret Police HQ"
+                                ]
+              },
     "units":  [
                   {
                       "type_id":  0,
-                      "count":  1
+                      "count":  1,
+                      "name":  "Settler"
                   },
                   {
                       "type_id":  1,
-                      "count":  30
+                      "count":  30,
+                      "name":  "Worker"
                   },
                   {
                       "type_id":  9,
-                      "count":  2
+                      "count":  2,
+                      "name":  "Swordsman"
                   },
                   {
                       "type_id":  10,
-                      "count":  5
+                      "count":  5,
+                      "name":  "Chariot"
                   },
                   {
                       "type_id":  12,
-                      "count":  27
+                      "count":  27,
+                      "name":  "Pikeman"
                   },
                   {
                       "type_id":  74,
-                      "count":  1
+                      "count":  1,
+                      "name":  "Medieval Infantry"
                   },
                   {
                       "type_id":  101,
-                      "count":  75
+                      "count":  75,
+                      "name":  "Enkidu Warrior"
                   }
               ],
     "cities":  [
@@ -57,7 +381,8 @@
                        "food_stored":  25,
                        "shields_stored":  45,
                        "production_type":  1,
-                       "production_id":  6
+                       "production_id":  6,
+                       "production_name":  "Courthouse"
                    },
                    {
                        "name":  "Akshak",
@@ -67,7 +392,8 @@
                        "food_stored":  24,
                        "shields_stored":  5,
                        "production_type":  1,
-                       "production_id":  6
+                       "production_id":  6,
+                       "production_name":  "Courthouse"
                    },
                    {
                        "name":  "Anshan",
@@ -77,7 +403,8 @@
                        "food_stored":  17,
                        "shields_stored":  24,
                        "production_type":  1,
-                       "production_id":  5
+                       "production_id":  5,
+                       "production_name":  "Library"
                    },
                    {
                        "name":  "Apisala",
@@ -87,7 +414,8 @@
                        "food_stored":  0,
                        "shields_stored":  31,
                        "production_type":  1,
-                       "production_id":  3
+                       "production_id":  3,
+                       "production_name":  "Temple"
                    },
                    {
                        "name":  "Babil",
@@ -97,7 +425,8 @@
                        "food_stored":  4,
                        "shields_stored":  2,
                        "production_type":  1,
-                       "production_id":  3
+                       "production_id":  3,
+                       "production_name":  "Temple"
                    },
                    {
                        "name":  "Bad-tibira",
@@ -107,7 +436,8 @@
                        "food_stored":  36,
                        "shields_stored":  144,
                        "production_type":  1,
-                       "production_id":  9
+                       "production_id":  9,
+                       "production_name":  "Bank"
                    },
                    {
                        "name":  "Dabrum",
@@ -117,7 +447,8 @@
                        "food_stored":  30,
                        "shields_stored":  154,
                        "production_type":  1,
-                       "production_id":  10
+                       "production_id":  10,
+                       "production_name":  "Cathedral"
                    },
                    {
                        "name":  "Der",
@@ -127,7 +458,8 @@
                        "food_stored":  0,
                        "shields_stored":  46,
                        "production_type":  1,
-                       "production_id":  6
+                       "production_id":  6,
+                       "production_name":  "Courthouse"
                    },
                    {
                        "name":  "Erech",
@@ -137,7 +469,8 @@
                        "food_stored":  35,
                        "shields_stored":  12,
                        "production_type":  1,
-                       "production_id":  10
+                       "production_id":  10,
+                       "production_name":  "Cathedral"
                    },
                    {
                        "name":  "Isin",
@@ -147,7 +480,8 @@
                        "food_stored":  7,
                        "shields_stored":  103,
                        "production_type":  1,
-                       "production_id":  56
+                       "production_id":  56,
+                       "production_name":  "Forbidden Palace"
                    },
                    {
                        "name":  "Kish",
@@ -157,7 +491,8 @@
                        "food_stored":  10,
                        "shields_stored":  140,
                        "production_type":  1,
-                       "production_id":  9
+                       "production_id":  9,
+                       "production_name":  "Bank"
                    },
                    {
                        "name":  "Kisurra",
@@ -167,7 +502,8 @@
                        "food_stored":  18,
                        "shields_stored":  17,
                        "production_type":  1,
-                       "production_id":  10
+                       "production_id":  10,
+                       "production_name":  "Cathedral"
                    },
                    {
                        "name":  "Kua",
@@ -177,7 +513,8 @@
                        "food_stored":  0,
                        "shields_stored":  50,
                        "production_type":  1,
-                       "production_id":  6
+                       "production_id":  6,
+                       "production_name":  "Courthouse"
                    },
                    {
                        "name":  "Kuara",
@@ -187,7 +524,8 @@
                        "food_stored":  0,
                        "shields_stored":  69,
                        "production_type":  1,
-                       "production_id":  6
+                       "production_id":  6,
+                       "production_name":  "Courthouse"
                    },
                    {
                        "name":  "Kutallu",
@@ -197,7 +535,8 @@
                        "food_stored":  32,
                        "shields_stored":  9,
                        "production_type":  1,
-                       "production_id":  10
+                       "production_id":  10,
+                       "production_name":  "Cathedral"
                    },
                    {
                        "name":  "Kutha",
@@ -207,7 +546,8 @@
                        "food_stored":  40,
                        "shields_stored":  54,
                        "production_type":  1,
-                       "production_id":  25
+                       "production_id":  25,
+                       "production_name":  "Harbor"
                    },
                    {
                        "name":  "Lagash",
@@ -217,7 +557,8 @@
                        "food_stored":  39,
                        "shields_stored":  42,
                        "production_type":  1,
-                       "production_id":  10
+                       "production_id":  10,
+                       "production_name":  "Cathedral"
                    },
                    {
                        "name":  "Marad",
@@ -227,7 +568,8 @@
                        "food_stored":  12,
                        "shields_stored":  5,
                        "production_type":  1,
-                       "production_id":  6
+                       "production_id":  6,
+                       "production_name":  "Courthouse"
                    },
                    {
                        "name":  "Nagsu",
@@ -237,7 +579,8 @@
                        "food_stored":  6,
                        "shields_stored":  5,
                        "production_type":  1,
-                       "production_id":  6
+                       "production_id":  6,
+                       "production_name":  "Courthouse"
                    },
                    {
                        "name":  "New Agade",
@@ -247,7 +590,8 @@
                        "food_stored":  8,
                        "shields_stored":  0,
                        "production_type":  1,
-                       "production_id":  29
+                       "production_id":  29,
+                       "production_name":  "Wealth"
                    },
                    {
                        "name":  "New Akshak",
@@ -257,7 +601,8 @@
                        "food_stored":  0,
                        "shields_stored":  48,
                        "production_type":  1,
-                       "production_id":  6
+                       "production_id":  6,
+                       "production_name":  "Courthouse"
                    },
                    {
                        "name":  "New Bad-tibira",
@@ -267,7 +612,8 @@
                        "food_stored":  0,
                        "shields_stored":  16,
                        "production_type":  1,
-                       "production_id":  9
+                       "production_id":  9,
+                       "production_name":  "Bank"
                    },
                    {
                        "name":  "New Der",
@@ -277,7 +623,8 @@
                        "food_stored":  12,
                        "shields_stored":  56,
                        "production_type":  1,
-                       "production_id":  4
+                       "production_id":  4,
+                       "production_name":  "Marketplace"
                    },
                    {
                        "name":  "New Erech",
@@ -287,7 +634,8 @@
                        "food_stored":  7,
                        "shields_stored":  45,
                        "production_type":  1,
-                       "production_id":  8
+                       "production_id":  8,
+                       "production_name":  "Aqueduct"
                    },
                    {
                        "name":  "New Isin",
@@ -297,7 +645,8 @@
                        "food_stored":  20,
                        "shields_stored":  36,
                        "production_type":  1,
-                       "production_id":  10
+                       "production_id":  10,
+                       "production_name":  "Cathedral"
                    },
                    {
                        "name":  "New Kish",
@@ -307,7 +656,8 @@
                        "food_stored":  0,
                        "shields_stored":  0,
                        "production_type":  1,
-                       "production_id":  29
+                       "production_id":  29,
+                       "production_name":  "Wealth"
                    },
                    {
                        "name":  "New Kisurra",
@@ -317,7 +667,8 @@
                        "food_stored":  39,
                        "shields_stored":  84,
                        "production_type":  1,
-                       "production_id":  12
+                       "production_id":  12,
+                       "production_name":  "Colosseum"
                    },
                    {
                        "name":  "New Kua",
@@ -327,7 +678,8 @@
                        "food_stored":  30,
                        "shields_stored":  40,
                        "production_type":  1,
-                       "production_id":  11
+                       "production_id":  11,
+                       "production_name":  "University"
                    },
                    {
                        "name":  "New Kuara",
@@ -337,7 +689,8 @@
                        "food_stored":  17,
                        "shields_stored":  2,
                        "production_type":  1,
-                       "production_id":  6
+                       "production_id":  6,
+                       "production_name":  "Courthouse"
                    },
                    {
                        "name":  "New Lagash",
@@ -347,7 +700,8 @@
                        "food_stored":  0,
                        "shields_stored":  72,
                        "production_type":  1,
-                       "production_id":  6
+                       "production_id":  6,
+                       "production_name":  "Courthouse"
                    },
                    {
                        "name":  "New Marad",
@@ -357,7 +711,8 @@
                        "food_stored":  7,
                        "shields_stored":  1,
                        "production_type":  1,
-                       "production_id":  8
+                       "production_id":  8,
+                       "production_name":  "Aqueduct"
                    },
                    {
                        "name":  "New Sumer",
@@ -367,7 +722,8 @@
                        "food_stored":  0,
                        "shields_stored":  37,
                        "production_type":  1,
-                       "production_id":  25
+                       "production_id":  25,
+                       "production_name":  "Harbor"
                    },
                    {
                        "name":  "New Umma",
@@ -377,7 +733,8 @@
                        "food_stored":  24,
                        "shields_stored":  12,
                        "production_type":  1,
-                       "production_id":  10
+                       "production_id":  10,
+                       "production_name":  "Cathedral"
                    },
                    {
                        "name":  "New Ur",
@@ -387,7 +744,8 @@
                        "food_stored":  16,
                        "shields_stored":  53,
                        "production_type":  1,
-                       "production_id":  3
+                       "production_id":  3,
+                       "production_name":  "Temple"
                    },
                    {
                        "name":  "New Zabalam",
@@ -397,7 +755,8 @@
                        "food_stored":  12,
                        "shields_stored":  62,
                        "production_type":  1,
-                       "production_id":  6
+                       "production_id":  6,
+                       "production_name":  "Courthouse"
                    },
                    {
                        "name":  "Sumer",
@@ -407,7 +766,8 @@
                        "food_stored":  32,
                        "shields_stored":  12,
                        "production_type":  2,
-                       "production_id":  12
+                       "production_id":  12,
+                       "production_name":  "Pikeman"
                    },
                    {
                        "name":  "Susa",
@@ -417,7 +777,8 @@
                        "food_stored":  20,
                        "shields_stored":  30,
                        "production_type":  1,
-                       "production_id":  8
+                       "production_id":  8,
+                       "production_name":  "Aqueduct"
                    },
                    {
                        "name":  "Tutub",
@@ -427,7 +788,8 @@
                        "food_stored":  4,
                        "shields_stored":  0,
                        "production_type":  1,
-                       "production_id":  29
+                       "production_id":  29,
+                       "production_name":  "Wealth"
                    },
                    {
                        "name":  "Umma",
@@ -437,7 +799,8 @@
                        "food_stored":  40,
                        "shields_stored":  78,
                        "production_type":  1,
-                       "production_id":  11
+                       "production_id":  11,
+                       "production_name":  "University"
                    },
                    {
                        "name":  "Ur",
@@ -447,7 +810,8 @@
                        "food_stored":  40,
                        "shields_stored":  0,
                        "production_type":  2,
-                       "production_id":  12
+                       "production_id":  12,
+                       "production_name":  "Pikeman"
                    },
                    {
                        "name":  "Zabalam",
@@ -457,7 +821,8 @@
                        "food_stored":  3,
                        "shields_stored":  23,
                        "production_type":  1,
-                       "production_id":  6
+                       "production_id":  6,
+                       "production_name":  "Courthouse"
                    }
                ],
     "history":  [
