@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CSA v0.8 — Map</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0c1523;color:#e7eef9;font:14px Segoe UI,Arial}
+header{background:#1c2d45;padding:14px 22px}
+h1{font-size:22px;margin:0 0 7px;color:#9bcdff}
+a{color:#9bcdff}
+nav{padding:10px 20px;background:#16253a;display:flex;flex-wrap:wrap;gap:18px}
+main{display:grid;grid-template-columns:minmax(0,1fr) 290px}
+canvas{display:block;width:100%;height:75vh;min-height:500px;background:#070d18;cursor:grab;touch-action:none}
+aside{padding:16px;background:#18283c;line-height:1.9}
+small{color:#b4c2d5}
+button{background:#324d70;border:0;color:white;padding:6px 12px;cursor:pointer}
+@media(max-width:800px){main{grid-template-columns:1fr}canvas{height:55vh;min-height:350px}}
+</style>
+</head>
+<body>
+<header>
+<h1>CSA v0.8 — интерактивная карта</h1>
+<a href="index.html">Обзор империи</a>
+</header>
+<nav>
+<span id="status">Загрузка...</span>
+<label><input type="checkbox" id="roads" checked> Дороги</label>
+<label><input type="checkbox" id="farms" checked> Ирригация/шахты</label>
+<label><input type="checkbox" id="cities" checked> Города</label>
+<label><input type="checkbox" id="workers" checked> Рабочие</label>
+<button id="reset">Вся карта</button>
+</nav>
+<main>
+<canvas id="map"></canvas>
+<aside>
+<h3>Информация о клетке</h3>
+<div id="details">Нажми на клетку.</div>
+<p><small>Серый слой — ранее разведанная клетка, сейчас находящаяся в тумане войны. Неизвестные ресурсы не публикуются. Рекомендации по работам добавим после проверки урожайности и доступности воды.</small></p>
+</aside>
+</main>
+<script>
+const canvas=document.getElementById("map");
+const ctx=canvas.getContext("2d");
+const terrain=[
+"Desert","Plains","Grassland","Flood plains",
+"Tundra","Hills","Mountains","Forest",
+"Jungle","Marsh","Volcano","Coast","Sea","Ocean"
+];
+const colors=[
+"#c9ae77","#b9b181","#59a75e","#9cbf72",
+"#b5bec0","#9b886c","#85868b","#397950",
+"#365f44","#647657","#a75e49","#56a7b9",
+"#347eaa","#244d84"
+];
+let data=null,lookup=new Map(),scale=1,px=0,py=0;
+let selected=null,drag=null,initialized=false;
+const tw=24,th=16;
+const key=(x,y)=>x+","+y;
+const X=t=>t.x*tw/2+tw/2;
+const Y=t=>t.y*th/2+th/2;
+const options=["roads","farms","cities","workers"];
+const enabled=id=>document.getElementById(id).checked;
+
+function reset(){
+ const w=canvas.clientWidth,h=canvas.clientHeight;
+ const mw=data.width*tw/2+tw,mh=data.height*th/2+th;
+ scale=Math.min((w-20)/mw,(h-20)/mh);
+ px=(w-mw*scale)/2;
+ py=(h-mh*scale)/2;
+ draw();
+}
+function resize(){
+ const dpr=window.devicePixelRatio||1;
+ canvas.width=Math.floor(canvas.clientWidth*dpr);
+ canvas.height=Math.floor(canvas.clientHeight*dpr);
+ if(!initialized){initialized=true;reset()}else draw();
+}
+function diamond(x,y,color,outline){
+ ctx.beginPath();
+ ctx.moveTo(x,y-th/2);
+ ctx.lineTo(x+tw/2,y);
+ ctx.lineTo(x,y+th/2);
+ ctx.lineTo(x-tw/2,y);
+ ctx.closePath();
+ ctx.fillStyle=color;ctx.fill();
+ if(outline){ctx.strokeStyle=outline;ctx.lineWidth=1.2;ctx.stroke()}
+}
+function draw(){
+ if(!data)return;
+ const dpr=window.devicePixelRatio||1;
+ ctx.setTransform(dpr,0,0,dpr,0,0);
+ ctx.clearRect(0,0,canvas.clientWidth,canvas.clientHeight);
+ ctx.setTransform(dpr*scale,0,0,dpr*scale,dpr*px,dpr*py);
+
+ for(const t of data.tiles){
+  const x=X(t),y=Y(t),base=t.terrain&15;
+  const over=(t.terrain>>4)&15;
+  diamond(x,y,colors[over]||colors[base]||"#6b7583");
+
+  if(!t.visible)diamond(x,y,"rgba(12,20,34,.48)");
+
+  if(t.visible&&t.improvements>=0){
+   if(enabled("roads")&&(t.improvements&3)){
+    ctx.strokeStyle=(t.improvements&2)?"#f9deff":"#f2daa8";
+    ctx.lineWidth=(t.improvements&2)?2.6:1.2;
+    ctx.beginPath();ctx.moveTo(x-7,y);ctx.lineTo(x+7,y);ctx.stroke();
+   }
+   if(enabled("farms")){
+    if(t.improvements&4){
+      ctx.fillStyle="#d9d8db";ctx.fillRect(x-3,y-3,6,6);
+    }
+    if(t.improvements&8){
+      ctx.fillStyle="#51e3f6";ctx.fillRect(x-3,y-3,6,6);
+    }
+   }
+  }
+ }
+ if(enabled("cities")){
+  for(const c of data.cities){
+   const x=X(c),y=Y(c);
+   ctx.fillStyle="#fff";
+   ctx.beginPath();ctx.arc(x,y,3.7,0,Math.PI*2);ctx.fill();
+   if(scale>.7){
+    ctx.font="bold 11px Segoe UI";
+    ctx.strokeStyle="#07111c";ctx.lineWidth=3;
+    ctx.strokeText(c.name,x+5,y-6);
+    ctx.fillText(c.name,x+5,y-6);
+   }
+  }
+ }
+ if(enabled("workers")){
+  for(const u of data.workers){
+   const x=X(u),y=Y(u);
+   ctx.fillStyle="#ffdb5d";
+   ctx.beginPath();ctx.arc(x-5,y+4,2.8,0,2*Math.PI);ctx.fill();
+  }
+ }
+ if(selected)diamond(X(selected),Y(selected),
+   "rgba(255,255,255,.15)","#ffff5a");
+}
+function inspect(t){
+ selected=t;
+ const flags=t.improvements;
+ const improvements=[];
+ if(flags>=0){
+  if(flags&1)improvements.push("дорога");
+  if(flags&2)improvements.push("железная дорога");
+  if(flags&4)improvements.push("шахта");
+  if(flags&8)improvements.push("ирригация");
+ }
+ const c=data.cities.find(c=>c.x===t.x&&c.y===t.y);
+ const workers=data.workers.filter(u=>u.x===t.x&&u.y===t.y);
+ const over=(t.terrain>>4)&15;
+ const lines=[
+  "Координаты: "+t.x+", "+t.y,
+  "Рельеф: "+(terrain[over]||"ID "+over),
+  "Видимость: "+(t.visible?"видна сейчас":"разведана ранее"),
+  "Владелец: "+(t.owner<0?"не показан":t.owner===1?"Шумер":"цивилизация "+t.owner),
+  "Улучшения: "+(flags<0?"не показаны":improvements.join(", ")||"нет"),
+  c?"Город: "+c.name+" (размер "+c.population+")":null,
+  workers.length?"Наших рабочих: "+workers.length:null
+ ].filter(Boolean);
+ const d=document.getElementById("details");
+ d.replaceChildren();
+ for(const line of lines){
+  const div=document.createElement("div");
+  div.textContent=line;d.appendChild(div);
+ }
+ draw();
+}
+canvas.addEventListener("pointerdown",e=>{
+ canvas.setPointerCapture(e.pointerId);
+ drag={x:e.clientX,y:e.clientY,px,py,moved:false};
+});
+canvas.addEventListener("pointermove",e=>{
+ if(!drag)return;
+ const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+ if(Math.abs(dx)+Math.abs(dy)>4)drag.moved=true;
+ px=drag.px+dx;py=drag.py+dy;draw();
+});
+canvas.addEventListener("pointerup",e=>{
+ if(!drag)return;
+ const moved=drag.moved;drag=null;
+ if(moved)return;
+ const r=canvas.getBoundingClientRect();
+ const wx=(e.clientX-r.left-px)/scale;
+ const wy=(e.clientY-r.top-py)/scale;
+ const x0=Math.round((wx-tw/2)/(tw/2));
+ const y0=Math.round((wy-th/2)/(th/2));
+ for(let y=y0-2;y<=y0+2;y++){
+  for(let x=x0-2;x<=x0+2;x++){
+   const t=lookup.get(key(x,y));
+   if(t&&Math.abs(wx-X(t))/(tw/2)+Math.abs(wy-Y(t))/(th/2)<=1){
+    inspect(t);return;
+   }
+  }
+ }
+});
+canvas.addEventListener("wheel",e=>{
+ e.preventDefault();
+ const r=canvas.getBoundingClientRect();
+ const x=e.clientX-r.left,y=e.clientY-r.top;
+ const wx=(x-px)/scale,wy=(y-py)/scale;
+ scale=Math.max(.1,Math.min(8,scale*(e.deltaY<0?1.2:1/1.2)));
+ px=x-wx*scale;py=y-wy*scale;draw();
+},{passive:false});
+for(const name of options){
+ document.getElementById(name).onchange=draw;
+}
+document.getElementById("reset").onclick=reset;
+window.addEventListener("resize",resize);
+(async()=>{
+ try{
+  const response=await fetch("map.json?t="+Date.now(),{cache:"no-store"});
+  if(!response.ok)throw Error("HTTP "+response.status);
+  data=await response.json();
+  lookup=new Map(data.tiles.map(t=>[key(t.x,t.y),t]));
+  document.getElementById("status").textContent=
+   data.explored+"/"+data.total_tiles+
+   " клеток, рабочих: "+data.workers.length;
+  resize();
+ }catch(e){
+  document.getElementById("status").textContent="Ошибка: "+e.message;
+ }
+})();
+</script>
+</body></html>
