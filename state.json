@@ -1,6 +1,6 @@
 {
     "schema":  7,
-    "updated_utc":  "2026-11-22T18:42:26.2545300Z",
+    "updated_utc":  "2026-11-23T16:09:13.8393079Z",
     "game_year":  "1160 AD",
     "city_count":  41,
     "total_population":  332,
@@ -832,6 +832,16 @@
                         "government_name":  "Monarchy",
                         "treasury":  207,
                         "research_id":  30,
+                        "research_beakers":  580,
+                        "research_counter":  3
+                    },
+                    {
+                        "updated_utc":  "2026-11-23T16:09:13.8393079Z",
+                        "game_year":  "1160 AD",
+                        "government_name":  "Monarchy",
+                        "treasury":  207,
+                        "research_id":  30,
+                        "research_name":  "Gunpowder",
                         "research_beakers":  580,
                         "research_counter":  3
                     }
