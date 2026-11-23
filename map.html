@@ -1,34 +1,111 @@
 <!DOCTYPE html>
-<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CSA — интерактивная карта v1.0</title>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CSA — карта и улучшения v1.1</title>
 <style>
-:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#101a29;color:#dce9f6;font:14px Segoe UI,Arial}
-header{padding:13px 18px;background:#18283e;border-bottom:1px solid #40516a;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
-a{color:#89c9ff}#stats{color:#bad1e7}#wrap{height:calc(100vh - 110px);min-height:300px;position:relative;overflow:hidden;touch-action:none}
-canvas{width:100%;height:100%;display:block;cursor:grab}canvas:active{cursor:grabbing}#tip{padding:9px 16px;color:#abc6df;background:#17263a;min-height:39px}
-button{background:#263f59;border:1px solid #546b83;color:white;border-radius:5px;padding:5px 10px;cursor:pointer}
-</style></head><body>
-<header><b>Civ3 Strategic Advisor — карта</b><a href="index.html">Главная</a><div id="stats">Загрузка...</div>
-<button id="fit">Вписать карту</button><small>Колесо: масштаб · Перетаскивание: перемещение · Наведи для данных тайла</small></header>
-<div id="wrap"><canvas id="map"></canvas></div><div id="tip">Данные о ресурсах пока не декодируются. Цвета показывают сырые категории рельефа, без их названий.</div>
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin:0; background:#0b1422; color:#dce9f6; font:14px Segoe UI,Arial,sans-serif; }
+header { display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 15px;background:#19283d;border-bottom:1px solid #43566b; }
+header b { color:#f6d28a;font-size:16px; } a { color:#8cc8ff; }
+#stats { color:#b8cce1;flex:1;min-width:230px; }
+#layers { display:flex; gap:12px; flex-wrap:wrap; padding:9px 15px; background:#142137;border-bottom:1px solid #344a64; }
+label { cursor:pointer;white-space:nowrap; } input { accent-color:#eac36e;vertical-align:-1px; }
+button { background:#293c55; color:white;border:1px solid #64768f;border-radius:6px;padding:6px 11px;cursor:pointer; }
+button:hover { background:#36516f; }
+#wrap { height: min(70vh, 820px); min-height:320px; position:relative; overflow:hidden; touch-action:none; }
+canvas { display:block;width:100%;height:100%;cursor:grab; } canvas:active {cursor:grabbing;}
+#info { border-top:1px solid #42536d;display:grid;grid-template-columns: minmax(250px,1fr) minmax(280px,1.4fr);gap:16px;padding:14px 18px; }
+#tip { color:#b8d3ed;white-space:pre-wrap;line-height:1.6; }
+#advice { margin:6px 0 0;padding-left:20px; max-height:180px;overflow-y:auto; color:#c4d6e9; }
+small {color:#9eb6d1;} .minor {font-size:12px;color:#92adc8;} .warn {color:#f3c980;}
+@media(max-width:650px) {#info {grid-template-columns:1fr;}#wrap{height:55vh}}
+</style>
+</head>
+<body>
+<header>
+<b>Civ3 Strategic Advisor 1.1</b> <a href="index.html">Обзор</a>
+<span id="stats">Загрузка карты...</span>
+<button id="fit">Вписать карту</button>
+</header>
+<div id="layers">
+<label><input type="checkbox" id="roads" checked> Дороги / ЖД</label>
+<label><input type="checkbox" id="works" checked> Шахты / ирригация</label>
+<label><input type="checkbox" id="resources" checked> Ресурсы (ID)</label>
+<label><input type="checkbox" id="cities" checked> Города</label>
+<label><input type="checkbox" id="workers" checked> Рабочие</label>
+<label><input type="checkbox" id="hints" checked> Кандидаты</label>
+</div>
+<div id="wrap"><canvas id="map" aria-label="Интерактивная карта Civilization III"></canvas></div>
+<section id="info">
+  <div><b>Информация о клетке</b><div id="tip">Нажми на разведанную клетку или наведи курсор. Колесо — масштаб; перетаскивание — перемещение.</div><p class="minor">Цвет — сырой код рельефа, не название ландшафта. В тумане войны улучшения скрыты. Слои управляются галочками.</p></div>
+  <div><b>Предварительные проверки рабочих</b><ol id="advice"><li>Ожидание данных...</li></ol><p class="warn">Это не оптимальный план шахт/ирригации: ещё требуется проверка BIQ, урожайности, воды и текущих заданий.</p></div>
+</section>
 <script>
-const canvas=document.querySelector('canvas'),ctx=canvas.getContext('2d'),tip=document.querySelector('#tip'),stats=document.querySelector('#stats');
-const colors=['#567c43','#b59c55','#598b9d','#7f8e63','#a58a58','#727d7d','#627e58','#ab9e72','#667f9b','#a57b69','#676e94','#7e936c','#9a8475','#74949b'];
-let data=null,scale=1,px=0,py=0,pressed=false,lastX=0,lastY=0,tiles=[],cities=[],workers=[];const tw=20,th=13;
-function world(t){return [20+t.x*tw/2,20+t.y*th/2]}
-function fit(){if(!data)return;const W=20+data.width*tw/2,H=20+data.height*th/2;scale=Math.min(canvas.clientWidth/W,canvas.clientHeight/H)*.94;scale=Math.max(.10,scale);px=(canvas.clientWidth-W*scale)/2;py=(canvas.clientHeight-H*scale)/2;draw()}
-function draw(){const dpr=window.devicePixelRatio||1,W=canvas.clientWidth,H=canvas.clientHeight;canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);ctx.fillStyle='#0c1421';ctx.fillRect(0,0,W,H);if(!data)return;ctx.save();ctx.translate(px,py);ctx.scale(scale,scale);
-for(const t of tiles){const [x,y]=world(t);if((x+tw)*scale+px<0||(x-tw)*scale+px>W||(y+th)*scale+py<0||(y-th)*scale+py>H)continue;
-ctx.fillStyle=colors[(t.terrain%colors.length+colors.length)%colors.length];ctx.globalAlpha=t.visible?1:.49;ctx.beginPath();ctx.moveTo(x,y-th/2);ctx.lineTo(x+tw/2,y);ctx.lineTo(x,y+th/2);ctx.lineTo(x-tw/2,y);ctx.closePath();ctx.fill();}
-ctx.globalAlpha=1;for(const c of cities){const [x,y]=world(c);ctx.fillStyle='#ffd65d';ctx.strokeStyle='#101010';ctx.lineWidth=1.2;ctx.fillRect(x-3,y-3,6,6);ctx.strokeRect(x-3,y-3,6,6);if(scale>.48){ctx.font='bold 10px Segoe UI';ctx.fillStyle='white';ctx.fillText(c.name,x+6,y-4)}}
-for(const w of workers){const [x,y]=world(w);ctx.beginPath();ctx.fillStyle='#f17aa3';ctx.arc(x,y,2.7,0,Math.PI*2);ctx.fill()}ctx.restore()}
-function nearest(X,Y){if(!data)return null;const x=(X-px)/scale,y=(Y-py)/scale;let best=null,dist=1e20;
-for(const t of tiles){const [a,b]=world(t);const v=((a-x)/tw)**2+((b-y)/th)**2;if(v<dist){dist=v;best=t}}return dist<.45?best:null}
-canvas.addEventListener('pointerdown',e=>{pressed=true;lastX=e.clientX;lastY=e.clientY;canvas.setPointerCapture(e.pointerId)});
-canvas.addEventListener('pointerup',()=>pressed=false);canvas.addEventListener('pointercancel',()=>pressed=false);
-canvas.addEventListener('pointermove',e=>{if(pressed){px+=e.clientX-lastX;py+=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;draw();return}
-const r=canvas.getBoundingClientRect(),t=nearest(e.clientX-r.left,e.clientY-r.top);tip.textContent=t?`Тайл (${t.x}, ${t.y}) · Рельеф ID ${t.terrain} · Виден сейчас: ${t.visible?'да':'нет'} · Владелец ${t.owner} · Улучшения (сырой битовый код) ${t.improvements} · Река ${t.river}`:'Нет данных (неразведанная территория)';});
-canvas.addEventListener('wheel',e=>{e.preventDefault();const r=canvas.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top,f=Math.exp(-e.deltaY*.001);const old=scale;scale=Math.max(.05,Math.min(10,scale*f));px=x-(x-px)*scale/old;py=y-(y-py)*scale/old;draw()},{passive:false});
-window.addEventListener('resize',draw);document.querySelector('#fit').addEventListener('click',fit);
-fetch('map.json?t='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).then(j=>{data=j;tiles=j.tiles||[];cities=j.cities||[];workers=j.workers||[];stats.textContent=`${j.width}×${j.height} | исследовано ${j.explored} из ${j.total_tiles} | видно ${j.visible_now} | городов ${cities.length} | рабочих ${workers.length}`;fit()}).catch(e=>{stats.textContent='Не удалось загрузить map.json: '+e.message});
-</script></body></html>
+'use strict';
+const canvas=document.getElementById('map'),ctx=canvas.getContext('2d'),tip=document.getElementById('tip'),stats=document.getElementById('stats');
+const colors=['#5f8851','#b29b64','#548eac','#8b9572','#a88557','#6f7979','#728867','#b6a47e','#5f8ea2','#9d7561','#767299','#819c75','#9a8075','#77a0a7','#917d6b','#6e8292'];
+const tw=20,th=13; let data=null,tiles=[],cities=[],workers=[],hints=[],scale=1,px=0,py=0;
+let down=null,pressed=false;const layer={};
+for(const key of ['roads','works','resources','cities','workers','hints']){
+  layer[key]=document.getElementById(key);layer[key].addEventListener('change',draw);
+}
+function world(t){return [20+t.x*tw/2,20+t.y*th/2];}
+function fit(){if(!data)return;const W=35+data.width*tw/2,H=35+data.height*th/2;
+  scale=Math.min(canvas.clientWidth/W,canvas.clientHeight/H)*.94;scale=Math.max(.08,scale);
+  px=(canvas.clientWidth-W*scale)/2;py=(canvas.clientHeight-H*scale)/2;draw();}
+function diamond(x,y){ctx.beginPath();ctx.moveTo(x,y-th/2);ctx.lineTo(x+tw/2,y);ctx.lineTo(x,y+th/2);ctx.lineTo(x-tw/2,y);ctx.closePath();}
+function draw(){const dpr=devicePixelRatio||1,W=canvas.clientWidth,H=canvas.clientHeight;
+  canvas.width=Math.max(1,Math.round(W*dpr));canvas.height=Math.max(1,Math.round(H*dpr));
+  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle='#0b1522';ctx.fillRect(0,0,W,H);
+  if(!data)return;ctx.save();ctx.translate(px,py);ctx.scale(scale,scale);
+  for(const t of tiles){const [x,y]=world(t);if((x+tw)*scale+px<0||(x-tw)*scale+px>W||(y+th)*scale+py<0||(y-th)*scale+py>H)continue;
+    ctx.globalAlpha=t.visible?1:.42;ctx.fillStyle=colors[(t.terrain%colors.length+colors.length)%colors.length];diamond(x,y);ctx.fill();ctx.globalAlpha=1;
+    if(!t.visible)continue;
+    if(layer.roads.checked&&t.road){ctx.lineWidth=t.railroad?2.1:1.2;ctx.strokeStyle=t.railroad?'#ffe7aa':'#d6dce2';ctx.beginPath();ctx.moveTo(x-6,y+3);ctx.lineTo(x+6,y-3);ctx.stroke();
+      if(t.railroad){ctx.lineWidth=.7;ctx.strokeStyle='#8a6548';for(let k=-2;k<=2;k++){ctx.beginPath();ctx.moveTo(x+k*2.3-1,y-k*1.2-2);ctx.lineTo(x+k*2.3+1,y-k*1.2+2);ctx.stroke();}}}
+    if(layer.works.checked){if(t.mine){ctx.fillStyle='#424c59';ctx.fillRect(x-3.7,y-3.7,7,7);ctx.strokeStyle='#f0e4cc';ctx.lineWidth=.8;ctx.strokeRect(x-3.7,y-3.7,7,7);}
+      if(t.irrigation){ctx.strokeStyle='#66c8fa';ctx.lineWidth=1.8;ctx.beginPath();ctx.moveTo(x-5,y+2.5);ctx.lineTo(x+4,y+2.5);ctx.moveTo(x-1,y-3);ctx.lineTo(x-1,y+3);ctx.stroke();}}
+    if(layer.resources.checked&&Number.isInteger(t.resource_id)){ctx.beginPath();ctx.arc(x+4,y-3,3.4,0,Math.PI*2);ctx.fillStyle='#ffd373';ctx.fill();if(scale>.65){ctx.fillStyle='#181619';ctx.font='bold 5px Segoe UI';ctx.textAlign='center';ctx.fillText(t.resource_id,x+4,y-1.5);ctx.textAlign='start';}}
+  }
+  if(layer.hints.checked)for(const h of hints){const [x,y]=world(h);ctx.beginPath();ctx.arc(x,y,7,0,2*Math.PI);ctx.strokeStyle='#fa8d87';ctx.lineWidth=1.5;ctx.stroke();}
+  if(layer.cities.checked)for(const c of cities){const [x,y]=world(c);ctx.fillStyle='#f6d477';ctx.strokeStyle='#171717';ctx.lineWidth=1.1;ctx.fillRect(x-3.8,y-3.8,7.6,7.6);ctx.strokeRect(x-3.8,y-3.8,7.6,7.6);
+    if(scale>.45){ctx.font='bold 10px Segoe UI';ctx.fillStyle='#ffffff';ctx.fillText(c.name,x+6,y-4);}}
+  if(layer.workers.checked)for(const u of workers){const [x,y]=world(u);ctx.beginPath();ctx.fillStyle='#e773ad';ctx.arc(x,y,2.8,0,Math.PI*2);ctx.fill();}
+  ctx.restore();}
+function nearest(X,Y){if(!data)return null;let best=null,dist=.6;const x=(X-px)/scale,y=(Y-py)/scale;
+  for(const t of tiles){const [a,b]=world(t);const d=((a-x)/tw)**2+((b-y)/th)**2;if(d<dist){best=t;dist=d;}}return best;}
+function show(t){if(!t){tip.textContent='Нет данных: клетка не разведана.';return;}
+  const yn=v=>v===null||v===undefined?'неизвестно':v?'да':'нет';
+  const owner=t.visible?String(t.owner):'неизвестно';
+  const res=Number.isInteger(t.resource_id)?'ID '+t.resource_id:'не публикуется / нет';
+  tip.textContent=`Клетка (${t.x}, ${t.y}) · видна: ${yn(t.visible)}\n`+
+    `Рельеф: код ${t.terrain}, базовый ${t.terrain_base}, наложение ${t.terrain_overlay}\n`+
+    `Владелец: ${owner} · река (raw): ${t.river}\n`+
+    `Дорога: ${yn(t.road)} · ЖД: ${yn(t.railroad)} · шахта: ${yn(t.mine)} · ирригация: ${yn(t.irrigation)}\n`+
+    `Крепость: ${yn(t.fortress)} · загрязнение: ${yn(t.pollution)} · ресурс: ${res}\n`+
+    `Флаги улучшений: ${t.improvements<0?'неизвестно':('0x'+t.improvements.toString(16))}`;
+}
+canvas.addEventListener('pointerdown',e=>{pressed=true;down={x:e.clientX,y:e.clientY,px,py};canvas.setPointerCapture(e.pointerId);});
+canvas.addEventListener('pointerup',e=>{if(!down)return;const moved=Math.hypot(e.clientX-down.x,e.clientY-down.y);
+  if(moved<6){const r=canvas.getBoundingClientRect();show(nearest(e.clientX-r.left,e.clientY-r.top));}
+  pressed=false;down=null;});
+canvas.addEventListener('pointercancel',()=>{pressed=false;down=null;});
+canvas.addEventListener('pointermove',e=>{if(pressed&&down){px=down.px+e.clientX-down.x;py=down.py+e.clientY-down.y;draw();return;}
+  const r=canvas.getBoundingClientRect();const t=nearest(e.clientX-r.left,e.clientY-r.top);if(t)show(t);});
+canvas.addEventListener('wheel',e=>{e.preventDefault();const r=canvas.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
+  const old=scale;scale=Math.max(.05,Math.min(10,scale*Math.exp(-e.deltaY*.001)));px=x-(x-px)*scale/old;py=y-(y-py)*scale/old;draw();},{passive:false});
+window.addEventListener('resize',draw);document.getElementById('fit').addEventListener('click',fit);
+fetch('map.json?t='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json();}).then(j=>{
+  data=j;tiles=j.tiles||[];cities=j.cities||[];workers=j.workers||[];hints=j.preliminary_advice||[];
+  const m=j.improvement_summary||{};
+  stats.textContent=`${j.width}×${j.height} | разведано ${j.explored}/${j.total_tiles} | видно ${j.visible_now} | города ${cities.length}, рабочие ${workers.length} | дороги ${m.roads??'?'}, ЖД ${m.railroads??'?'}, шахты ${m.mines??'?'}, ирригация ${m.irrigation??'?'}`;
+  const list=document.getElementById('advice');list.replaceChildren();
+  if(!hints.length){const li=document.createElement('li');li.textContent='Кандидатов на проверку дороги на текущих клетках рабочих нет.';list.appendChild(li);}
+  for(const h of hints){const li=document.createElement('li');li.textContent=`(${h.x}, ${h.y}) — ${h.reason}`;list.appendChild(li);}
+  if(!j.resource_data_included){layer.resources.checked=false;layer.resources.disabled=true;layer.resources.parentElement.title='Ресурсы доступны только в локальном аудите до включения соответствующей настройки.';}
+  fit();
+}).catch(e=>{stats.textContent='Ошибка загрузки map.json: '+e.message;});
+</script>
+</body></html>
