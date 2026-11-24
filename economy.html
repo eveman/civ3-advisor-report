@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CSA 1.3 — экономика и аудит правил BIQ</title>
+<style>
+:root{color-scheme:dark;font-family:Segoe UI,Arial,sans-serif}*{box-sizing:border-box}
+body{margin:0;background:#0e1727;color:#e4eef9;font-size:14px}header{background:#1c2e43;border-bottom:1px solid #38516e;padding:20px max(calc((100vw - 1150px)/2),24px)}
+h1{color:#ecd08f;font-size:22px;margin:0 0 8px}a{color:#91c9ff}main{max-width:1200px;margin:auto;padding:18px 25px 50px}
+h2{font-size:18px;color:#c0dcfa;margin-top:28px}.box{background:#1b2b40;padding:17px;border:1px solid #3d5770;border-radius:12px;margin:10px 0}
+.warn{color:#ffd09a}.small{color:#b8c9d7;font-size:13px}nav{display:flex;gap:15px;flex-wrap:wrap;margin-top:12px}
+table{border-collapse:collapse;width:100%;font-size:13px}th,td{border-bottom:1px solid #38516e;padding:8px;text-align:left}th{color:#b7dafa}.wide{overflow:auto}
+ul{line-height:1.6;padding-left:24px}code{color:#f2d08e}
+</style></head><body>
+<header><h1>CSA 1.3 — экономический аудит</h1><div>Локальная BIQ · карта · предварительные расчёты без платного AI API</div>
+<nav><a href="index.html">Цивилизация</a><a href="map.html">Карта</a><a href="advisor.html">Рекомендации</a><a href="economy.json">economy.json</a></nav></header>
+<main>
+<div class="box warn"><strong>Числа ещё НЕ подтверждены как фактическая урожайность в игре.</strong> Для этого требуется привязать BIQ к текущему SAV и сравнить показания нескольких клеток с игровым интерфейсом. Неподтверждённые ресурсы, бонусная трава и железные дороги исключаются. Кандидаты на дорогу не являются приказами рабочим.</div>
+<div id="status" class="box">Загрузка economy.json...</div>
+<h2>Происхождение правил</h2><div class="box" id="source"></div>
+<h2>Таблица рельефа из локальной BIQ</h2><div class="box wide"><table><thead><tr><th>ID</th><th>Тип</th><th>Еда</th><th>Щиты</th><th>Торговля</th><th>Ирригация</th><th>Шахта</th><th>Дорога</th></tr></thead><tbody id="rules"></tbody></table></div>
+<h2>Оценки отдельных видимых клеток (не окончательные)</h2>
+<div class="box wide"><table><thead><tr><th>X</th><th>Y</th><th>Рельеф</th><th>Еда</th><th>Щиты</th><th>Торговля</th></tr></thead><tbody id="sample"></tbody></table></div>
+<h2>Отложенные расчёты и исключения</h2><div class="box"><div id="excluded"></div><ul id="limitations"></ul></div>
+</main><script>
+'use strict';
+const $=id=>document.getElementById(id);
+function add(parent,tag,text){const node=document.createElement(tag);node.textContent=String(text??'—');parent.appendChild(node);return node;}
+function row(parent,values){const tr=add(parent,'tr','');for(const v of values)add(tr,'td',v);}
+(async()=>{try{
+const r=await fetch('economy.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);
+const e=await r.json();if(e.schema!==13)throw Error('Неверная версия формата данных');
+$('status').textContent=`Год ${e.game_year} · BIQ: ${e.rules_status} · оценено: ${(e.provisional_yields||[]).length} клеток · статус: ${e.certainty}`;
+$('source').textContent='SHA256 BIQ: '+(e.rules_sha256||'отсутствует')+' · '+(e.rules_warning||'Нет предупреждения');
+for(const t of e.terrain_rules||[])row($('rules'),[t.id,t.name,t.food,t.shields,t.commerce,t.irrigation_bonus,t.mine_bonus,t.road_bonus]);
+for(const t of (e.provisional_yields||[]).slice(0,120))row($('sample'),[t.x,t.y,t.terrain,t.provisional?.food,t.provisional?.shields,t.provisional?.commerce]);
+const parts=Object.entries(e.skipped_by_reason||{}).map(([key,value])=>key+': '+value);
+$('excluded').textContent=parts.length?parts.join(' · '):'Нет исключений';
+for(const t of e.limitations||[])add($('limitations'),'li',t);
+}catch(err){$('status').textContent='Ошибка загрузки экономического аудита: '+err.message;}
+})();
+</script></body></html>
