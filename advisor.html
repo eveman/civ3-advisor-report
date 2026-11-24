@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CSA — стратегический советник и история v1.2</title>
+<style>
+:root{color-scheme:dark;font-family:Segoe UI,Arial,sans-serif}*{box-sizing:border-box}
+body{margin:0;background:#0d1827;color:#e3edf7;font-size:14px}
+header{padding:20px min(4vw,42px);background:#1c2e43;border-bottom:1px solid #3c5671}
+h1{font-size:22px;color:#f2d08e;margin:0 0 8px}a{color:#91c9ff}
+main{max-width:1250px;margin:auto;padding:18px min(4vw,30px)}
+nav{display:flex;gap:18px;flex-wrap:wrap;margin:8px 0}
+#status{color:#a8c0d4;margin:14px 0}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:11px;margin:15px 0 25px}
+.card,.box{background:#1c2d40;border:1px solid #354e68;border-radius:12px;padding:15px}
+.card .n{font-size:24px;font-weight:700;color:#eac986}.card .t{color:#bed0df;font-size:12px}
+h2{color:#c1dcfa;font-size:18px;margin:25px 0 10px}
+small,.muted{color:#adc0d1}.warn{color:#f2bd87}
+.find{margin:10px 0;padding:13px 15px;background:#1d3145;border-left:4px solid #e6bd79;border-radius:7px}
+.find .head{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:5px}
+.find strong{font-size:15px}.tag{font-size:11px;color:#a8d4ff;background:#294665;padding:3px 7px;border-radius:10px}
+.find p{margin:5px 0 0;line-height:1.45}
+table{border-collapse:collapse;width:100%;font-size:13px}th,td{border-bottom:1px solid #334b62;padding:9px 7px;text-align:left;white-space:nowrap}th{color:#b7daf5}#historyWrap{overflow-x:auto}
+ul{padding-left:22px;line-height:1.6}
+@media(min-width:900px){.cols{display:grid;grid-template-columns:1.5fr 1fr;gap:20px}}
+</style>
+</head>
+<body>
+<header><h1>Civ3 Strategic Advisor 1.2</h1><div>Локальный стратегический движок · история партии · без AI API</div>
+<nav><a href="index.html">Состояние цивилизации</a><a href="map.html">Интерактивная карта</a><a href="analysis.json">analysis.json</a><a href="history.json">history.json</a><a href="advisor_policy.json">advisor_policy.json</a></nav></header>
+<main>
+<div id="status">Загрузка проверенных данных...</div>
+<div class="cards" id="cards"></div>
+<div class="cols"><section><h2>Проверки и рекомендации</h2><p class="muted">Факты из SAV отделены от предварительных проверок. Порядок учитывает настройки приоритетов. Это не численная оптимизация производства и улучшений тайлов.</p><div id="findings"></div></section>
+<section><h2>Что ещё неизвестно</h2><div class="box"><ul id="limitations"></ul></div><h2>Согласованные правила</h2><div class="box" id="policy">Ожидание настроек...</div></section></div>
+<h2>История наблюдений</h2><p class="warn">Строка истории = уникальное содержимое сохранённой игры, а НЕ обязательно один ход. Разность двух строк не равна приросту за ход.</p><div class="box" id="historyWrap"><table><thead><tr><th>Сохранение (UTC)</th><th>Год игры</th><th>Города</th><th>Население</th><th>Юниты</th><th>Рабочие</th><th>Казна</th><th>Изучено тайлов</th></tr></thead><tbody id="historyRows"></tbody></table></div>
+<p class="muted">Публичная страница не содержит SAV, локальные ID ресурсов и GitHub PAT. В другом месте сайта могут быть только разрешённые для публикации данные карты.</p>
+</main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+function txt(el, text){el.textContent=String(text??'—');return el;}
+function child(parent,tag,className,content){const e=document.createElement(tag);if(className)e.className=className;if(content!==undefined)txt(e,content);parent.appendChild(e);return e;}
+function card(title,value){const box=child($('cards'),'div','card');child(box,'div','t',title);child(box,'div','n',value);}
+async function fetchJson(file){const r=await fetch(file+'?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error(file+' HTTP '+r.status);return await r.json();}
+(async()=>{try{
+const [a,h,p]=await Promise.all(['analysis.json','history.json','advisor_policy.json'].map(fetchJson));
+if(a.schema!==12||h.schema!==12||p.schema!==12)throw Error('Incompatible schema');
+$('status').textContent=`Год игры: ${a.source?.game_year||'?'} · расчёт: ${a.generated_utc||'?'} · наблюдений: ${h.observation_count||0}${a.source?.revisited_previous_save?' · открыто старое сохранение':''}`;
+const s=a.summary||{}; for(const [k,v] of [['Города',s.city_count],['Население',s.total_population],['Юниты',s.owned_units],['Рабочие',s.workers],['Казна',s.treasury],['Содержание',s.city_maintenance],['Разведано',s.explored_tiles],['Дороги видимые',s.visible_roads]])card(k,v);
+for(const f of a.findings||[]){const b=child($('findings'),'div','find');const head=child(b,'div','head');child(head,'strong','',f.title);child(head,'span','tag',f.category+' · '+f.confidence);child(b,'p','',f.detail);}
+if(!(a.findings||[]).length)child($('findings'),'p','muted','Новых проверок нет. Это не означает оптимальность всех решений.');
+for(const item of a.missing_data||[])child($('limitations'),'li','',item);
+const pp=Array.isArray(p.manual_guidance)?p.manual_guidance:[];
+child($('policy'),'div','muted','Приоритеты: '+Object.entries(p.focus_weights||{}).map(([k,v])=>k+'='+v).join(' · '));
+if(pp.length)for(const rule of pp)child($('policy'),'p','',rule.category+': '+rule.text);
+else child($('policy'),'p','muted','Пользовательских правил пока нет. Редактируются через меню агента на Windows.');
+const obs=Array.isArray(h.observations)?h.observations:[];
+for(const item of obs.slice().reverse().slice(0,50)){
+ const row=child($('historyRows'),'tr'); for(const v of [item.observed_utc,item.game_year,item.city_count,item.total_population,item.owned_units,item.workers,item.treasury,item.explored_tiles])child(row,'td','',v);
+}
+}catch(e){$('status').textContent='Не удалось загрузить аналитические файлы: '+e.message;}})();
+</script>
+</body></html>
